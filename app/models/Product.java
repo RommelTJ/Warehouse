@@ -2,6 +2,7 @@ package models;
 
 import java.util.ArrayList;
 import java.util.List;
+import play.data.validation.Constraints;
 
 public class Product {
 
@@ -11,13 +12,15 @@ public class Product {
         products = new ArrayList<Product>();
         products.add(new Product("111111", "Paperclips 1", "Paperclips description 1"));
         products.add(new Product("222222", "Paperclips 2", "Paperclips description 2"));
-        products.add(new Product("333333", "Paperclips 1", "Paperclips description 3"));
-        products.add(new Product("444444", "Paperclips 1", "Paperclips description 4"));
-        products.add(new Product("555555", "Paperclips 1", "Paperclips description 5"));
-        products.add(new Product("666666", "Paperclips 1", "Paperclips description 6"));
+        products.add(new Product("333333", "Paperclips 3", "Paperclips description 3"));
+        products.add(new Product("444444", "Paperclips 4", "Paperclips description 4"));
+        products.add(new Product("555555", "Paperclips 5", "Paperclips description 5"));
+        products.add(new Product("666666", "Paperclips 6", "Paperclips description 6"));
     }
 
+    @Constraints.Required
     public String ean;
+    @Constraints.Required
     public String name;
     public String description;
 

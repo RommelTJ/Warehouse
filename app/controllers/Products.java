@@ -22,10 +22,32 @@ public class Products extends Controller {
     }
 
     public static Result details(String ean){
-        return TODO;
+        final Product product = Product.findByEan(ean);
+        if (product == null){
+            return notFound(String.format("Product %s does not exist.", ean));
+        }
+        Form<Product> filledForm = productForm.fill(product);
+        return ok(details.render(filledForm));
     }
 
     public static Result save(){
-        return TODO;
+        Form <Product> boundForm = productForm.bindFromRequest();
+        if (boundForm.hasErrors()){
+            flash("Error!", "Please correct the form below.");
+            return badRequest(details.render(boundForm));
+        }
+        Product product = boundForm.get();
+        product.save();
+        flash("Success!", String.format("Succesfully added product %s", product));
+        return redirect(routes.Products.list());
+    }
+
+    public static Result delete(String ean){
+        final Product product = Product.findByEan(ean);
+        if (product==null){
+            return notFound(String.format("Product %s does not exist.", ean));
+        }
+        Product.remove(product);
+        return redirect(routes.Products.list());
     }
 }
