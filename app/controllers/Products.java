@@ -12,7 +12,11 @@ public class Products extends Controller {
 
     private static final Form<Product> productForm = Form.form(Product.class);
 
-    public static Result list() {
+    public static Result index() {
+        return redirect(routes.Products.list(1));
+    }
+
+    public static Result list(int page) {
         List<Product> products = Product.findAll();
         return ok(list.render(products));
     }
@@ -39,7 +43,7 @@ public class Products extends Controller {
         Product product = boundForm.get();
         product.save();
         flash("Success!", String.format("Succesfully added product %s", product));
-        return redirect(routes.Products.list());
+        return redirect(routes.Products.list(1));
     }
 
     public static Result delete(String ean){
@@ -48,6 +52,6 @@ public class Products extends Controller {
             return notFound(String.format("Product %s does not exist.", ean));
         }
         Product.remove(product);
-        return redirect(routes.Products.list());
+        return redirect(routes.Products.list(1));
     }
 }
