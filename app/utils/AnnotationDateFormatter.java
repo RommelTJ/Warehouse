@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.Locale;
 
 public class AnnotationDateFormatter extends Formatters.AnnotationFormatter<DateFormat, Date> {
+    private final static String PATTERN = "dd-MM-yyyy";
 
     @Override
     public Date parse(DateFormat annotation, String text, Locale locale)

@@ -1,12 +1,26 @@
 package models;
 
-import java.util.List;
+import play.db.ebean.Model;
+
+import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.List;
 
-public class Warehouse {
+@Entity
+public class Warehouse extends Model {
+
+    @Id
+    public Long id;
+
     public String name;
-    public List<StockItem> stock = new ArrayList<>();
 
+    @OneToMany(mappedBy = "warehouse")
+    public List<StockItem> stock = new ArrayList<StockItem>();
+
+    @OneToOne
+    public Address address;
+
+    @Override
     public String toString() {
         return name;
     }

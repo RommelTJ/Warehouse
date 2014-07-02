@@ -10,23 +10,24 @@ import play.mvc.Controller;
 import play.mvc.With;
 import views.html.products.*;
 
-import static play.mvc.Http.MultipartFormData;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import com.avaje.ebean.*;
+import static play.mvc.Http.MultipartFormData;
 
+@With(CatchAction.class)
 public class Products extends Controller {
 
     private static final Form<Product> productForm = Form.form(Product.class);
 
     public static Result index() {
-        return redirect(routes.Products.list(1));
+        return redirect(routes.Products.list(0));
     }
 
     public static Result list(Integer page) {
-        List<Product> products = Product.findAll();
+        Page<Product> products = Product.find(page);//findAll();
         return ok(list.render(products));
     }
 
@@ -40,6 +41,7 @@ public class Products extends Controller {
     }
 
     public static Result save() {
+        MultipartFormData body = request().body().asMultipartFormData();
         Form<Product> boundForm = productForm.bindFromRequest();
         if(boundForm.hasErrors()) {
             flash("error", "Please correct the form below.");
@@ -47,16 +49,15 @@ public class Products extends Controller {
         }
 
         Product product = boundForm.get();
-        MultipartFormData body = request().body().asMultipartFormData();
-        MultipartFormData.FilePart part = body.getFile("picture");
 
-        if(part!=null){
+        MultipartFormData.FilePart part = body.getFile("picture");
+        if(part != null) {
             File picture = part.getFile();
+
             try {
                 product.picture = Files.toByteArray(picture);
-            }
-            catch (IOException e){
-                return internalServerError("Error reading file upload.");
+            } catch (IOException e) {
+                return internalServerError("Error reading file upload");
             }
         }
 
@@ -66,13 +67,24 @@ public class Products extends Controller {
                 tags.add(Tag.findById(tag.id));
             }
         }
-        product.tags = tags;
 
-        product.save();
+        product.tags = tags;
+        if (product.id == null) {
+            product.save();
+        } else {
+            product.update();
+        }
+
         flash("success",
                 String.format("Successfully added product %s", product));
 
         return redirect(routes.Products.list(1));
+    }
+
+    public static Result picture(String ean) {
+        final Product product = Product.findByEan(ean);
+        if(product == null) return notFound();
+        return ok(product.picture);
     }
 
     public static Result delete(String ean) {
@@ -80,13 +92,7 @@ public class Products extends Controller {
         if(product == null) {
             return notFound(String.format("Product %s does not exists.", ean));
         }
-        Product.remove(product);
+        product.delete();
         return redirect(routes.Products.list(1));
-    }
-
-    public static Result picture(String ean){
-        final Product product = Product.findByEan(ean);
-        if (product==null) return notFound();
-        return ok(product.picture);
     }
 }
