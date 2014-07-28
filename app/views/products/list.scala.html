@@ -36,9 +36,9 @@
         <td><a href="@routes.Products.details(product)">@product.name</a></td>
         <td><a href="@routes.Products.details(product)">@product.name</a></td>
         <td>@product.date.format("dd-MM-yyyy")</td>
-        <td style="cursor:pointer">
+        <td>
             <a href="@routes.Products.details(product)"><i class="icon icon-pencil"></i></a>
-            <a onclick="javascript:del('@routes.Products.delete(product.ean)')"><i class="glyphicon glyphicon-trash"></i></a>
+            <a onclick="javascript:del('@routes.Products.delete(product.ean)')"><i class="icon icon-trash"></i></a>
         </td>
     </tr>
     }
@@ -47,7 +47,7 @@
 </table>
 
 <div id="pagination" class="pagination">
-    <ul class="list-inline">
+    <ul>
         @if(currentPage.hasPrev) {
         <li class="prev">
             <a href="@routes.Products.list(currentPage.getPageIndex - 1)">&larr; </a>
@@ -75,5 +75,5 @@
 
 
 <a href="@routes.Products.newProduct()" class="btn">
-    <i class="glyphicon glyphicon-plus"></i> New product</a>
+    <i class="icon-plus"></i> New product</a>
 }
