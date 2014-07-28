@@ -9,7 +9,6 @@ import play.mvc.Result;
 import play.mvc.Controller;
 import play.mvc.With;
 import views.html.products.*;
-import play.mvc.Security;
 
 import java.io.File;
 import java.io.IOException;
@@ -18,7 +17,6 @@ import java.util.List;
 import com.avaje.ebean.*;
 import static play.mvc.Http.MultipartFormData;
 
-@Security.Authenticated(Secured.class)
 @With(CatchAction.class)
 public class Products extends Controller {
 
@@ -29,8 +27,8 @@ public class Products extends Controller {
     }
 
     public static Result list(Integer page) {
-        Page<Product> products = Product.find(page);
-        return ok(views.html.catalog.render(products));
+        Page<Product> products = Product.find(page);//findAll();
+        return ok(list.render(products));
     }
 
     public static Result newProduct() {

@@ -5,13 +5,7 @@ version := "1.0-SNAPSHOT"
 libraryDependencies ++= Seq(
   javaJdbc,
   javaEbean,
-  cache,
-  "com.google.guava" % "guava" % "14.0",
-  filters,
-  "securesocial" %% "securesocial" % "master-SNAPSHOT"
-)
-
-resolvers += Resolver.url("sbt-plugin-snapshots", url("http://repo.scala-sbt.org/scalasbt/sbt-plugin-snapshots/"))(Resolver.ivyStylePatterns)
-
+  cache
+)     
 
 play.Project.playJavaSettings
